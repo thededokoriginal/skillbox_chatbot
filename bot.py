@@ -301,5 +301,3 @@ if __name__ == '__main__':
     config_loggers()
     vk_bot = Bot(group_id=MY_GROUP_ID, token=TOKEN)
     vk_bot.run()
-
-# зачёт!
