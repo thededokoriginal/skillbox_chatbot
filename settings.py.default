@@ -1,0 +1,123 @@
+TOKEN = 'your_admin_token'
+MY_GROUP_ID = 'your_vk_group_id'
+
+INTENTS = [
+    {
+        'name': 'Купить билет',
+        'tokens': '/ticket',
+        'scenario': 'get_ticket',
+        'answer': None
+    },
+    {
+        'name': 'Помощь',
+        'tokens': '/help',
+        'scenario': None,
+        'answer': 'Справка о сервисе'
+    },
+]
+
+FLIGHTS = {
+    'Москва': {
+        'Париж': [9, 'пн', 'чт'],
+        'Прага': [14],
+        'Калифорния': [16, '10-го числа', '20-го числа']
+    },
+    'Лондон': {
+        'Париж': [10],
+        'Прага': [13],
+        'Калифорния': [17]
+    },
+    'Париж': {
+        'Лондон': [16],
+        'Прага': [12],
+        'Калифорния': [8],
+        'Москва': [15]
+    },
+    'Прага': {
+        'Лондон': [18],
+        'Париж': [19],
+        'Калифорния': [17],
+        'Москва': [20]
+    },
+    'Калифорния': {
+        'Лондон': [12],
+        'Прага': [16],
+        'Париж': [13],
+        'Москва': [9]
+    }
+}
+
+SCENARIOS = {
+    'get_ticket': {
+        'first_step': 'step_1',
+        'steps': {
+            'step_1': {
+                'text': 'Введите город отправления',
+                'failure_text': 'У нашей авиакомпании нет рейсов в таком городе. Выше указаны доступные города',
+                'handler': 'handle_name_departure',
+                'next_step': 'step_2'
+            },
+            'step_2': {
+                'text': 'Введите город прибытия',
+                'failure_text': 'Из города отправления нет рейсов в данный город. Выше указаны доступные города',
+                'handler': 'handle_name_arrival',
+                'next_step': 'step_3'
+            },
+            'step_3': {
+                'text': 'Введите дату вылета в формате dd-mm-yyyy',
+                'failure_text': 'Ошибка ввода даты!',
+                'handler': 'handle_date',
+                'next_step': 'step_4'
+            },
+            'step_4': {
+                'text': 'Выберите номер рейса',
+                'failure_text': 'Ошибка ввода!',
+                'handler': 'handle_flights',
+                'next_step': 'step_5'
+            },
+            'step_5': {
+                'text': 'Введите количество мест (от 1 до 5)',
+                'failure_text': 'Ошибка ввода!',
+                'handler': 'handle_passengers_count',
+                'next_step': 'step_6'
+            },
+            'step_6': {
+                'text': 'Напишите комментарий к заказу',
+                'failure_text': 'Ошибка ввода!',
+                'handler': 'handle_comment',
+                'next_step': 'step_7'
+            },
+            'step_7': {
+                'text': 'Проверим данные заказа, всё верно? (да/нет)',
+                'failure_text': 'Ошибка ввода или данные не подтверждены пользователем!',
+                'handler': 'handle_data',
+                'next_step': 'step_8'
+            },
+            'step_8': {
+                'text': 'Введите ваш номер телефона в формате 9ХХХХХХХХХ',
+                'failure_text': 'Ошибка ввода!',
+                'handler': 'handle_phone',
+                'next_step': 'step_9'
+            },
+            'step_9': {
+                'text': 'Спасибо за выбор нашей авиакомпании! Ваш билет во вложении. Мы свяжемся с вами по номеру:'
+                        ' {phone}',
+                'image': 'get_ticket',
+                'failure_text': None,
+                'handler': None,
+                'next_step': None
+            }
+        }
+    }
+}
+
+HELP = 'Сервис заказа авиабилетов. Чтобы начать заказ, отправьте боту сообщение /ticket. Для вывода этой справки' \
+       ' отправьте сообщение /help. Доступные города для заказа: Москва, Париж, Прага, Лондон, Калифорния.'
+
+DB_CONFIG = dict(
+    provider='postgres',
+    user='postgres',
+    password='1234',
+    host='localhost',
+    database='vk_chat_bot'
+)
